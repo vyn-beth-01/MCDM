@@ -14,7 +14,19 @@ st.sidebar.image('logo.png')
 st.sidebar.title('Data Science Capstone Project')
 
 
+
+
 # Create main content page
+
+src1_page = st.Page("pages/page_src1.py", title="SRC", icon=":material/add_circle:")
+src2_page = st.Page("pages/page_src2.py", title="SRC2", icon=":material/delete:")
+
+
+pg = st.navigation([create_page, delete_page])
+st.set_page_config(page_title="Data manager", page_icon=":material/edit:")
+pg.run()
+
+
 # menu = ["Project overview" , "Price prediction", "Prediction for HASS avocado in the future"]
 menu = ("Project overview" , "src", "src2")
 choice = st.sidebar.selectbox('Content', menu)

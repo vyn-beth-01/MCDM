@@ -2,3 +2,4 @@ numpy
 matplot
 PyQt5
 pandas
+streamlit

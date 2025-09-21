@@ -15,8 +15,8 @@ st.sidebar.title('Subject: MCDM')
 
 
 # Create main content page
-src1_page = st.Page("pages/page_src1.py", title="SRC", icon=":material/add_circle:")
-src2_page = st.Page("pages/page_src2.py", title="SRC2", icon=":material/delete:")
+src1_page = st.Page("page_src1.py", title="SRC", icon=":material/add_circle:")
+src2_page = st.Page("page_src2.py", title="SRC2", icon=":material/delete:")
 
 #Set up the navigation
 pg = st.navigation([src1_page, src2_page])

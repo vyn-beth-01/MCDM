@@ -15,7 +15,9 @@ from mcdm_func_lib.src.VIKOR import *
 
 
 
-
+# Main page content
+st.markdown("# Main page 🎈")
+st.sidebar.markdown("# Main page 🎈")
 
 
 

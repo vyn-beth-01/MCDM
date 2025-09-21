@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.sidebar.image('../figures/Logo-HCMIU.svg.png')
+st.sidebar.image('Logo-HCMIU.svg.png')
 st.sidebar.title('Subject: MCDM')
 
 

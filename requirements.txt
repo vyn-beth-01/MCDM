@@ -1,5 +1,5 @@
 numpy
-matplot
+matplotlib
 PyQt5
 pandas
 streamlit

@@ -20,8 +20,9 @@ import copy
 import numpy as np
 import matplotlib.pyplot as plt
 from PyQt5 import *
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+
+from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtSql import *
 

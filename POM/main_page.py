@@ -45,10 +45,15 @@ if choice == 'Main_page':
     # Basic pre-process inputs:
     lst_of_attributes_norm=[0,1]
     lst_of_attributes_norm = lst_of_attributes.split(",")
-    # st.write(lst_of_attributes_norm)
-    number_of_attributes = len(lst_of_attributes_norm)
+
+    lst_alternatives = [str(i) for i in range(0,number_of_alternatives)]
+    default_alternatives= ["Weights","Prop"]
+    for i in default_alternatives:
+        lst_alternatives.append(i)
+
+    # Initiate dataframe
     df = pd.DataFrame(
-        index=np.arange(number_of_alternatives),
+        index=lst_alternatives,
         columns=lst_of_attributes_norm,
     )
     edited_df = st.data_editor(df,num_rows="dynamic")
@@ -93,6 +98,7 @@ if choice == 'Main_page':
         topsis.markdown("You choose the :red[TOPSIS] method")
         a= hello()
         st.write(a)
+        
     if saw.button("SAW",type="secondary"):
         saw.markdown("You choose the :red[SAW] method")
         a= hello()
@@ -104,4 +110,15 @@ if choice == 'Main_page':
     if _4.button("PLACEHOLDER",type="secondary"):
         _4.markdown("You choose the :red[PLACEHOLDER] method")
         st.write("Placeholder")
+#     @st.cache_data
+#     def convert_df(df):
+#         return df.to_csv().encode('utf-8')
+
+#     csv = pd.read_excel('mcdm_func_lib/src/TOPSIS.xlsx')
+#     download = st.download_button(
+#     label="Download output to txt file",
+#     data=csv,
+#     # file_name='sample_input.csv',
+#     # mime='text/csv',
+# )
 

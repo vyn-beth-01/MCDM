@@ -12,7 +12,150 @@ import copy
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
-import data_normalization as df_normalization
+# import data_normalization as df_normalization
+
+"""Normalization section"""
+from sklearn.preprocessing import MinMaxScaler,StandardScaler,RobustScaler
+import pandas as pd
+import copy
+import numpy as np
+
+def minmaxscaler(df,exclude_row=None):
+    """
+    This func employ the min-max scaler lib in python to execute the normlization data
+    Args:
+    - df (dataframe): the raw data frame
+    - exclude_row (optional): this is optional fields to specific number of row to exclude out of normalize step
+    Return:
+    - norm_df: normalize data WITH original exclude row.
+    - normalized_data: matrix after normalize
+    """
+
+    # Initialize MinMaxScaler
+    scaler = MinMaxScaler()
+    if not exclude_row:
+        target_data = df
+    else:
+        target_data = df.iloc[:-exclude_row,:]
+    
+    # print(df.shape)
+    # print(target_data.shape)
+    # Fit and transform the data
+    normalized_data = scaler.fit_transform(target_data)
+    # print(normalized_data)
+
+    # Convert back to DataFrame (optional)
+    normalized_df = pd.DataFrame(normalized_data, columns=df.columns)
+
+    final_normalized_df = pd.concat([normalized_df,df.iloc[-2:,:]])
+    return final_normalized_df,normalized_data
+
+
+def standardscaler(df,exclude_row=None):
+    """
+    This func employ the standard scaler lib in python to execute the normlization data
+    Args:
+    - df (dataframe): the raw data frame
+    - exclude_row (optional): this is optional fields to specific number of row to exclude out of normalize step
+    Return:
+    - norm_df: normalize data WITH original exclude row.
+    - normalized_data: matrix after normalize
+    """
+
+    # Initialize MinMaxScaler
+    scaler = StandardScaler()
+    if not exclude_row:
+        target_data = df
+    else:
+        target_data = df.iloc[:-exclude_row,:]
+    
+    # print(df.shape)
+    # print(target_data.shape)
+    # Fit and transform the data
+    normalized_data = scaler.fit_transform(target_data)
+    # print(normalized_data)
+
+    # Convert back to DataFrame (optional)
+    normalized_df = pd.DataFrame(normalized_data, columns=df.columns)
+
+    final_normalized_df = pd.concat([normalized_df,df.iloc[-2:,:]])
+    return final_normalized_df,normalized_data
+
+
+def robustscaler(df,exclude_row=None):
+    """
+    This func employ the robust scaler lib in python to execute the normlization data
+    Args:
+    - df (dataframe): the raw data frame
+    - exclude_row (optional): this is optional fields to specific number of row to exclude out of normalize step
+    Return:
+    - norm_df: normalize data WITH original exclude row.
+    - normalized_data: matrix after normalize
+    """
+
+    # Initialize MinMaxScaler
+    scaler = RobustScaler()
+    if not exclude_row:
+        target_data = df
+    else:
+        target_data = df.iloc[:-exclude_row,:]
+    
+    # print(df.shape)
+    # print(target_data.shape)
+    # Fit and transform the data
+    normalized_data = scaler.fit_transform(target_data)
+    # print(normalized_data)
+
+    # Convert back to DataFrame (optional)
+    normalized_df = pd.DataFrame(normalized_data, columns=df.columns)
+
+    final_normalized_df = pd.concat([normalized_df,df.iloc[-2:,:]])
+    return final_normalized_df,normalized_data
+
+
+
+def normV1(df,exclude_row=None):
+    if not exclude_row:
+        target_data = df
+    else:
+        target_data = df.iloc[:-exclude_row,:]
+    # Get attribute:
+    ALTS = target_data.index()[:-2] #list of alternatives
+    NUM_ALTS=len(ALTS)
+    ATBS=target_data.columns() #list of attributes
+    NUM_ATBS=len(ATBS)
+    ATB_PROP = target_data.loc["Prop"].values().tolist() #list of prop
+    WEIGHTS=[float(i) for i in target_data.loc['Weights'].values().tolist()]
+    
+    mat = target_data.to_numpy()
+    """Normalization SquareRootmethod"""
+    new_mat=copy.deepcopy(mat)
+    new_mat2=copy.deepcopy(mat)
+    sqr_col=[]
+    for c in range(NUM_ATBS):
+        val=np.sqrt(np.dot(new_mat[:,c],new_mat[:,c]))
+        new_mat[:,c]=WEIGHTS[c]*1/val*new_mat[:,c]
+        new_mat2[:,c]=1/val*new_mat2[:,c]
+        sqr_col.append(val)
+    return new_mat,new_mat2
+
+def normV2(mat,NUM_ATBS,NUM_ALTS,WEIGHTS):
+    # self._txtResult.append("The normalization method \n Max-Min Difference \n")
+    new_mat=copy.deepcopy(mat)
+    new_mat2=copy.deepcopy(mat)
+    ref=[]
+    for c in range(NUM_ATBS):
+        min_val=np.min(new_mat[:,c])
+        max_val=np.max(new_mat[:,c])
+        ref.append((min_val,max_val))
+        for r in range(NUM_ALTS):  
+            new_mat[r,c]=WEIGHTS[c]*(new_mat[r,c]-min_val)/(max_val-min_val)
+            new_mat2[r,c]=(new_mat2[r,c]-min_val)/(max_val-min_val)
+            
+    print("Reference :",ref)
+    return new_mat, new_mat2
+
+
 
 """
 The below method is supported func and main run for method TOPSIS
@@ -36,13 +179,13 @@ def normalize_wo_w_weight(raw_df,normalize_method):
     TBU
     """
     if normalize_method=='Min-Max Scaler':
-        norm_df,norm_matrix = df_normalization.minmaxscaler(raw_df,exclude_row=2)
+        norm_df,norm_matrix = minmaxscaler(raw_df,exclude_row=2)
     elif normalize_method=='StandardScaler':
-        norm_df,norm_matrix = df_normalization.standardscaler(raw_df,exclude_row=2)
+        norm_df,norm_matrix = standardscaler(raw_df,exclude_row=2)
     elif normalize_method=='RobustScaler':
-        norm_df,norm_matrix = df_normalization.robustscaler(raw_df,exclude_row=2)
+        norm_df,norm_matrix = robustscaler(raw_df,exclude_row=2)
     elif normalize_method=='SquareRootMethod':
-        norm_df,norm_matrix = df_normalization.normV1(raw_df,exclude_row=2)
+        norm_df,norm_matrix = normV1(raw_df,exclude_row=2)
     return norm_df,norm_matrix
 
 def normalize_w_weight(norm_df,norm_matrix,):

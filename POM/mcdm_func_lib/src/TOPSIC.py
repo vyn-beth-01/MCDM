@@ -138,6 +138,8 @@ def normV2(mat,NUM_ATBS,NUM_ALTS,WEIGHTS):
     # self._txtResult.append("The normalization method \n Max-Min Difference \n")
     new_mat=copy.deepcopy(mat)
     new_mat2=copy.deepcopy(mat)
+    new_mat= new_mat.astype(int)
+    new_mat2= new_mat2.astype(int)
     ref=[]
     for c in range(NUM_ATBS):
         min_val=np.min(new_mat[:,c])

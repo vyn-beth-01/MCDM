@@ -24,5 +24,5 @@ def _SaveResult(data,method,filename=None):
         print(f"Error creating file: {e}")
 
 def main_run(raw_df,normalize_method):
-    _txtResults= topsis.TOPSIS_run(raw_df,normalize_method)
-    
+    ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP= topsis.TOPSIS_run(raw_df,normalize_method)
+    return ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP

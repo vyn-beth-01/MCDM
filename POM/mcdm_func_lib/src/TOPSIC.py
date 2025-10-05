@@ -163,7 +163,7 @@ The below method is supported func and main run for method TOPSIS
 
    
 def _GetData(raw_df):
-    ALTS = raw_df[:-2,:].index() #list of alternatives
+    ALTS = raw_df.iloc[:-2,:].index() #list of alternatives
     NUM_ALTS=len(ALTS)
     ATBS=raw_df.columns() #list of attributes
     NUM_ATBS=len(ATBS)

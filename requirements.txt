@@ -3,4 +3,5 @@ matplotlib
 PyQt5
 pandas
 streamlit
-sklearn.preprocessing
+sklearn
+sklearn

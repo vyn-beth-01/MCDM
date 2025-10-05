@@ -1,6 +1,7 @@
 from sklearn.preprocessing import MinMaxScaler,StandardScaler,RobustScaler
 import pandas as pd
 import copy
+import numpy as np
 
 def minmaxscaler(df,exclude_row=None):
     """
@@ -96,29 +97,30 @@ def robustscaler(df,exclude_row=None):
 
 
 
- def normV1(self,mat):
-        self._txtResult.append("The normalization method \n Squareroot Method \n")
-        new_mat=copy.deepcopy(mat)
-        new_mat2=copy.deepcopy(mat)
-        sqr_col=[]
-        for c in range(self.NUM_ATBS):
-            val=np.sqrt(np.dot(new_mat[:,c],new_mat[:,c]))
-            new_mat[:,c]=self.WEIGHTS[c]*1/val*new_mat[:,c]
-            new_mat2[:,c]=1/val*new_mat2[:,c]
-            sqr_col.append(val)
-        return new_mat,new_mat2
+def normV1(df,NUM_ATBS,NUM_ALTS,WEIGHTS):
+        
+    """Normalization SquareRootmethod"""
+    new_mat=copy.deepcopy(mat)
+    new_mat2=copy.deepcopy(mat)
+    sqr_col=[]
+    for c in range(NUM_ATBS):
+        val=np.sqrt(np.dot(new_mat[:,c],new_mat[:,c]))
+        new_mat[:,c]=WEIGHTS[c]*1/val*new_mat[:,c]
+        new_mat2[:,c]=1/val*new_mat2[:,c]
+        sqr_col.append(val)
+    return new_mat,new_mat2
 
-def normV2(self,mat):
-    self._txtResult.append("The normalization method \n Max-Min Difference \n")
+def normV2(mat,NUM_ATBS,NUM_ALTS,WEIGHTS):
+    # self._txtResult.append("The normalization method \n Max-Min Difference \n")
     new_mat=copy.deepcopy(mat)
     new_mat2=copy.deepcopy(mat)
     ref=[]
-    for c in range(self.NUM_ATBS):
+    for c in range(NUM_ATBS):
         min_val=np.min(new_mat[:,c])
         max_val=np.max(new_mat[:,c])
         ref.append((min_val,max_val))
-        for r in range(self.NUM_ALTS):  
-            new_mat[r,c]=self.WEIGHTS[c]*(new_mat[r,c]-min_val)/(max_val-min_val)
+        for r in range(NUM_ALTS):  
+            new_mat[r,c]=WEIGHTS[c]*(new_mat[r,c]-min_val)/(max_val-min_val)
             new_mat2[r,c]=(new_mat2[r,c]-min_val)/(max_val-min_val)
             
     print("Reference :",ref)

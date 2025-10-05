@@ -11,8 +11,8 @@ st.set_page_config(
     page_title="Subject: Multiple Criteria Decison Making", 
     initial_sidebar_state="expanded"
 )
-# img = Image.open('Logo-HCMIU.png')
-st.image('Logo-HCMIU.png')
+
+# st.image('Logo-HCMIU.png')
 # st.sidebar.image('logo-vector-IU-01.png')
 st.sidebar.title('Subject: MCDM')
 # main page
@@ -23,7 +23,7 @@ choice = st.sidebar.selectbox('Content', menu)
 if choice == 'Main_page':
     st.divider() 
     st.title('SUBJECT OVERVIEW- TBU')
-    # st.badge("In-developing")
+    st.badge("In-developing")
     st.caption("This page is still under-developing, if any inputs, please email to me through :blue[beth.mieiu24007@gmail.com] or academic one :blue[TBU]")
     st.divider() 
 
@@ -33,7 +33,7 @@ if choice == 'Main_page':
     st.write("Step 2: Choose the method & check the results")
 
     st.divider()
-    st.header("Step 1- Input the list of attributes, alternatives, prop & weights:")
+    st.subheader("Step 1- Input the list of attributes, alternatives, prop & weights:")
     #Method 1: Input by select number of cols and rows:
     with st.expander(" Click to input data variables "):
     # st.markdown("### Parameters")
@@ -42,10 +42,10 @@ if choice == 'Main_page':
         lst_of_attributes = col1s[0].text_input("(*)Input name of attributes, break by ',' ; enter to apply")
         cols2=st.columns(2)
         number_of_alternatives = cols2[1].number_input('Input number of alternatives(optional)',min_value =1)
-        normalize_method = cols2[0].selectbox('(*)Data normalize method', ('Min-Max Scaler', 'StandardScaler','SquareRootMethod'))
+        normalize_method = cols2[0].selectbox('(*)Data normalize method', ('Min-Max Scaler', 'StandardScaler','RobustScaler','SquareRootMethod'))
 
     # Basic pre-process inputs:
-    lst_of_attributes_norm=[0,1]
+    lst_of_attributes_norm=[0,1] #initiate default cols name
     lst_of_attributes_norm = lst_of_attributes.split(",")
 
     lst_alternatives = [str(i) for i in range(0,number_of_alternatives)]
@@ -87,31 +87,45 @@ if choice == 'Main_page':
 #         )
 
     st.divider()
-    st.header("Step 2: Select method")   
+    st.subheader("Step 2: Select method")   
     st.write("This is the input data to run")
     st.table(edited_df)
 
-    def hello():
+    def callbacks(method):
+        import callbacks
+        
         return 1
     
 
-    topsis, saw, vikor,_4,_5 = st.columns(5)
+    topsis, saw, vikor, promethee, electre = st.columns(5)
+    #initiate method variable:
+    method = None
+
     if topsis.button("TOPSIS",type="secondary"):
         topsis.markdown("You choose the :red[TOPSIS] method")
-        a= hello()
-        st.write(a)
+        method="topsis"
         
     if saw.button("SAW",type="secondary"):
         saw.markdown("You choose the :red[SAW] method")
-        a= hello()
-        st.write(a)
+        method="saw"
+
     if vikor.button("VIKOR",type="secondary"):
         vikor.markdown("You choose the :red[VIKOR] method")
-        a= hello()
-        st.write(a)
-    if _4.button("PLACEHOLDER",type="secondary"):
-        _4.markdown("You choose the :red[PLACEHOLDER] method")
-        st.write("Placeholder")
+        method="vikor"
+
+    if promethee.button("PROMETHEE",type="secondary"):
+        promethee.markdown("You choose the :red[PROMETHEE] method")
+        method="promethee"
+
+    if electre.button("ELECTRE",type="secondary"):
+        electre.markdown("You choose the :red[ELECTRE] method")
+        method="electre"
+
+
+    if method is not None:
+        st.write("Calculation has been completed, output illustrate as below. \n Click Download if need raw output: " )
+        callbacks(method)
+
 #     @st.cache_data
 #     def convert_df(df):
 #         return df.to_csv().encode('utf-8')

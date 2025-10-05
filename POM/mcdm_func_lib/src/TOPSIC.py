@@ -163,9 +163,9 @@ The below method is supported func and main run for method TOPSIS
 
    
 def _GetData(raw_df):
-    ALTS = raw_df.iloc[:-2,:].index() #list of alternatives
+    ALTS = raw_df.iloc[:-2,:].index #list of alternatives
     NUM_ALTS=len(ALTS)
-    ATBS=raw_df.columns() #list of attributes
+    ATBS=raw_df.columns #list of attributes
     NUM_ATBS=len(ATBS)
     ATB_PROP = raw_df.loc["Prop"].values().tolist() #list of prop
     WEIGHTS=[float(i) for i in raw_df.loc['Weights'].values().tolist()]

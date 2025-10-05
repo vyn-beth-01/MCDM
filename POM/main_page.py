@@ -11,8 +11,8 @@ st.set_page_config(
     page_title="Subject: Multiple Criteria Decison Making", 
     initial_sidebar_state="expanded"
 )
-img = Image.open('Logo-HCMIU.png')
-st.sidebar.image(img)
+# img = Image.open('Logo-HCMIU.png')
+st.image('Logo-HCMIU.png')
 # st.sidebar.image('logo-vector-IU-01.png')
 st.sidebar.title('Subject: MCDM')
 # main page

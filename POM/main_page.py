@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 # from  callbacks import *
 # from visualization import * 
+from PIL import Image
 
 
 
@@ -10,7 +11,8 @@ st.set_page_config(
     page_title="Subject: Multiple Criteria Decison Making", 
     initial_sidebar_state="expanded"
 )
-
+img = Image.open('Logo-HCMIU.png')
+st.sidebar.image(img)
 # st.sidebar.image('logo-vector-IU-01.png')
 st.sidebar.title('Subject: MCDM')
 # main page

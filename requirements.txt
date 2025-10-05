@@ -3,5 +3,5 @@ matplotlib
 PyQt5
 pandas
 streamlit
-sklearn
-sklearn
+# sklearn
+# sklearn

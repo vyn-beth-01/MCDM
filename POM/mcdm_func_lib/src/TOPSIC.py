@@ -12,7 +12,7 @@ import copy
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
-import MCDM.POM.mcdm_func_lib.src.data_normalization as df_normalization
+import data_normalization as df_normalization
 
 """
 The below method is supported func and main run for method TOPSIS

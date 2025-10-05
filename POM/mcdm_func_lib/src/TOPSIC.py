@@ -167,9 +167,9 @@ def _GetData(raw_df):
     NUM_ALTS=len(ALTS)
     ATBS=raw_df.columns #list of attributes
     NUM_ATBS=len(ATBS)
-    ATB_PROP = raw_df.loc["Prop"].values().tolist() #list of prop
-    WEIGHTS=[float(i) for i in raw_df.loc['Weights'].values().tolist()]
-    str_lst=[str(i) for i in raw_df.loc['Weights'].values().tolist()]
+    ATB_PROP = raw_df.loc["Prop"].values.tolist() #list of prop
+    WEIGHTS=[float(i) for i in raw_df.loc['Weights'].values.tolist()]
+    str_lst=[str(i) for i in raw_df.loc['Weights'].values.tolist()]
 
     return ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP
 

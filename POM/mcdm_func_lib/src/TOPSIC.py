@@ -18,11 +18,7 @@ import data_normalization as df_normalization
 The below method is supported func and main run for method TOPSIS
 """
 
-
- 
-
-                
-        
+   
 def _GetData(raw_df):
     ALTS = raw_df.index()[:-2] #list of alternatives
     NUM_ALTS=len(ALTS)
@@ -127,6 +123,6 @@ def TOPSIS_run(raw_df,normalize_method):
     
     
     
-    
+    return _txtResults
 
 

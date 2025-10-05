@@ -91,10 +91,10 @@ if choice == 'Main_page':
     st.write("This is the input data to run")
     st.table(edited_df)
 
-    def callbacks(method):
+    def callbacks(raw_df, normalize_method):
         import callbacks
-        
-        return 1
+        results = callbacks.main_run(raw_df,normalize_method)
+        return results
     
 
     topsis, saw, vikor, promethee, electre = st.columns(5)
@@ -124,7 +124,8 @@ if choice == 'Main_page':
 
     if method is not None:
         st.write("Calculation has been completed, output illustrate as below. \n Click Download if need raw output: " )
-        callbacks(method)
+        result = callbacks(edited_df, normalize_method)
+        st.write(result)
 
 #     @st.cache_data
 #     def convert_df(df):

@@ -123,7 +123,7 @@ def normV1(df,exclude_row=None):
     ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP= _GetData(df)
     
     mat = target_data.to_numpy()
-    """Normalization SquareRootmethod"""
+    #Normalization SquareRootmethod
     new_mat=copy.deepcopy(mat)
     new_mat2=copy.deepcopy(mat)
     sqr_col=[]

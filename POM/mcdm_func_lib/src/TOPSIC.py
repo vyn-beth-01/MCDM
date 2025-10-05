@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov 12 10:30:44 2022
-
-@author: kyphuc
+Created on 04 Oct 2025
+@author: vyn
+The source has reference from teachers sources. 
 """
 import sys
 import time
@@ -11,110 +11,74 @@ import os
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
-from PyQt5 import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtSql import *
+from datetime import datetime
+import data_normalization as df_normalization
 
-class frmTOPSIC(QWidget):
-    def __init__(self,**kwargs):
-        super(QWidget,self).__init__()  
-        self._layout = QGridLayout()
-        
-        self._add_widget('_lblTitle',QLabel('TOPSIC METHOD',self),[0,0,1,6])     
-        self._add_widget('_lblAlternatives',QLabel('Input list of alternatives',self),[1,0,1,2])
-        self._add_widget('_txtAlternatives',QLineEdit('',self),[1,2,1,4])  
-        self._add_widget('_lblAttributes',QLabel('Input list of attributes',self),[2,0,1,2])
-        self._add_widget('_txtAttributes',QLineEdit('',self),[2,2,1,4])  
-        
-        self._add_widget('_lblProperties',QLabel('Input list of properties',self),[3,0,1,2])
-        self._add_widget('_txtProperties',QLineEdit('',self),[3,2,1,4])  
-        
-        self._add_widget('_lblWeights',QLabel('Input list of weights',self),[4,0,1,2])
-        self._add_widget('_txtWeights',QLineEdit('',self),[4,2,1,4])  
-        
-        self._add_widget('_lblSelection',QLabel('Normalization method',self),[5,0,1,2])
-        self._add_widget('_cmbSelections',QComboBox(self),[5,2,1,4])
-        self._cmbSelections.addItems(['[1]:Squareroot Method','[2]:Max-Min Difference Method',])
-        self._cmbSelections.setEditable(False)
-        self._add_widget('_chkPlot',QCheckBox("PlotGraph",self),[6,0,1,2])
-        
-        self._add_widget('_btnRun',QPushButton("Run",self),[6,3,1,1],func=self._Run)
-        self._add_widget('_btnSave',QPushButton("Save",self),[6,4,1,1],func=self._SaveResult)
-        self._add_widget('_btnClose',QPushButton("Close",self),[6,5,1,1],func=self._Close)
-        self._add_widget('_txtResult',QTextEdit('',self),[7,0,10,6])  
-       
-        
-        self._lblTitle.setFont(QFont("Times",20, QFont.Bold))
-        self._lblTitle.setStyleSheet("color: blue")
-        self._lblTitle.setAlignment(Qt.AlignCenter)
-        self._layout.setVerticalSpacing(10)
-        self._layout.setHorizontalSpacing(10)
-        self.setWindowTitle('TOPSIC Method')        
-        self.setLayout(self._layout)
-        self.setFixedSize(600,500)
-        
-        #self.openDatabase()
-        self.setWindowState(Qt.WindowActive)
-        self.show()
-        
-        self.ALTS=None
-        self.NUM_ALTS=0
-        self.ATBS=None
-        self.NUM_ATBS=0
-        self.ATB_PROP=None
-        self.WEIGHTS=None
-        self.SURVEY=None
-        
-    def _add_widget(self,comp,item,pos,**kwargs):
-        self .__setattr__(comp,item) 
-        self._layout.addWidget(getattr(self,comp),pos[0],pos[1],pos[2],pos[3])
-        if 'func' in kwargs:
-            getattr(self,comp).clicked.connect(kwargs['func'])  
-    def _SaveResult(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getSaveFileName(self, 
-            "Save File", "", "All Files(*);;Text Files(*.txt)", options = options)
-        if fileName:
-            with open(fileName, 'w') as f:
-                f.write(self._txtResult.toPlainText())
+"""
+The below method is supported func and main run for method TOPSIS
+"""
+
+def TOPSIS_run(raw_df,normalize_method):
+    #init variable:
+    _txtResults = ""
+ 
+def _SaveResult(data,method,filename=None):
+    if not filename:
+        # Get the current date and time
+        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename_with_datetime = f"Output_results_{method}{timestamp_str}.txt"
+    try:
+        with open(filename_with_datetime, "w") as f:
+            f.write(data)
+        print(f"File '{filename_with_datetime}' created successfully.")
+    except IOError as e:
+        print(f"Error creating file: {e}")
                 
-    def _Run(self):
-        self._GetData()
-        if self._chkPlot.isChecked():
-            self.plot_graph()
-        self._TOPSIC()
         
-    def _GetData(self):
-        self.ALTS=self._txtAlternatives.text().split(',')
-        self.NUM_ALTS=len(self.ALTS)
-        self.ATBS=self._txtAttributes.text().split(',')
-        self.NUM_ATBS=len(self.ATBS)
-        
-        str_lst=self._txtProperties.text().split(',')
-        self.ATB_PROP=[int(k) for k in str_lst]
-        str_lst=self._txtWeights.text().split(',')
-        self.WEIGHTS=[float(k) for k in str_lst]
-        self.SURVEY=np.zeros((self.NUM_ALTS,self.NUM_ATBS))
-        for r in range(self.NUM_ALTS):
-            while True:
-                str_text,ok=QInputDialog.getText(self,"Get input",f"Please score {self.ALTS[r]} : ")
-                if ok and len(str_text)>0:
-                    break
-          
-            str_lst=str_text.split(',')
-            self.SURVEY[r,:]=[float(i) for i in str_lst]
-        
-    def _TOPSIC(self):
-        self._txtResult.clear()
-        self._txtResult.append("TOPSIC Method Report \n")
-        self._txtResult.append("Alternative list \n"+str(self.ALTS) + "\n")
-        self._txtResult.append("Attribute list \n" + str(self.ATBS) + "\n")
-        self._txtResult.append("Attribute prop \n" +str(self.ATB_PROP) + "\n")
-        self._txtResult.append("Weight list \n" + str(self.WEIGHTS) + "\n")
-        self._txtResult.append("The survey matrix \n" + str(self.SURVEY) +"\n")
+    def _GetData(raw_df):
+        ALTS = raw_df.index()[:-2] #list of alternatives
+        NUM_ALTS=len(ALTS)
+        ATBS=raw_df.columns() #list of attributes
+        NUM_ATBS=len(ATBS)
+        ATB_PROP = raw_df.loc["Prop"].values().tolist() #list of prop
+        WEIGHTS=[float(i) for i in raw_df.loc['Weights'].values().tolist()]
+        str_lst=[str(i) for i in raw_df.loc['Weights'].values().tolist()]
+
+        return ALTS, NUM_ALTS, ATBS, NUM_ATBS
+    
+    def normalize_wo_weight(raw_df,normalize_method):
+
+        """
+        TBU
+        """
+        if normalize_method=='Min-Max Scaler':
+            norm_df,norm_matrix = df_normalization.minmaxscaler(raw_df,exclude_row=2)
+        elif normalize_method=='StandardScaler':
+            norm_df,norm_matrix = df_normalization.standardscaler(raw_df,exclude_row=2)
+        elif normalize_method=='RobustScaler':
+            norm_df,norm_matrix = df_normalization.robustscaler(raw_df,exclude_row=2)
+
+        return norm_df,norm_matrix
+    def normalize_w_weight(norm_df,norm_matrix,):
+
+        return
+    
+    def 
+
+
+
+
+
+
+
+
+
+        _txtResults+="TOPSIC Method Report \n"
+        _txtResults+="Alternative list \n"+str(self.ALTS) + "\n"
+        _txtResults+="Attribute list \n" + str(self.ATBS) + "\n"
+        _txtResults+="Attribute prop \n" +str(self.ATB_PROP) + "\n"
+        _txtResults+="Weight list \n" + str(self.WEIGHTS) + "\n"
+        _txtResults+="The survey matrix \n" + str(self.SURVEY) +"\n"
       
     
         ind=self._cmbSelections.currentIndex()
@@ -143,39 +107,13 @@ class frmTOPSIC(QWidget):
         self._txtResult.append("Best alternative: \n" + self.ALTS[ind] + "\n")
         
         
-    def normV1(self,mat):
-        self._txtResult.append("The normalization method \n Squareroot Method \n")
-        new_mat=copy.deepcopy(mat)
-        new_mat2=copy.deepcopy(mat)
-        sqr_col=[]
-        for c in range(self.NUM_ATBS):
-            val=np.sqrt(np.dot(new_mat[:,c],new_mat[:,c]))
-            new_mat[:,c]=self.WEIGHTS[c]*1/val*new_mat[:,c]
-            new_mat2[:,c]=1/val*new_mat2[:,c]
-            sqr_col.append(val)
-        return new_mat,new_mat2
+   
 
-    def normV2(self,mat):
-        self._txtResult.append("The normalization method \n Max-Min Difference \n")
-        new_mat=copy.deepcopy(mat)
-        new_mat2=copy.deepcopy(mat)
-        ref=[]
-        for c in range(self.NUM_ATBS):
-            min_val=np.min(new_mat[:,c])
-            max_val=np.max(new_mat[:,c])
-            ref.append((min_val,max_val))
-            for r in range(self.NUM_ALTS):  
-                new_mat[r,c]=self.WEIGHTS[c]*(new_mat[r,c]-min_val)/(max_val-min_val)
-                new_mat2[r,c]=(new_mat2[r,c]-min_val)/(max_val-min_val)
-              
-        print("Reference :",ref)
-        return new_mat, new_mat2
-
-    def findPNIS(self,mat):
+    def findPNIS(mat):
         PIS=[]
         NIS=[]
-        for c in range(self.NUM_ATBS):
-            if(self.ATB_PROP[c]==1):
+        for c in range(NUM_ATBS):
+            if(ATB_PROP[c]==1):
                 PIS.append(np.max(mat[:,c]))
                 NIS.append(np.min(mat[:,c]))
 
@@ -212,11 +150,3 @@ class frmTOPSIC(QWidget):
         ax.legend(self.ALTS,loc="upper right")
         plt.show()
     
-    def _Close(self):      
-        self.close()
-        #QApplication.quit()
-        
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex=frmTOPSIC()
-    sys.exit(app.exec_())

@@ -93,8 +93,9 @@ if choice == 'Main_page':
 
     def callbacks(raw_df, normalize_method):
         import callbacks
-        results = callbacks.main_run(raw_df,normalize_method)
-        return results
+        ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP = callbacks.main_run(raw_df,normalize_method)
+        
+        return ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP
     
 
     topsis, saw, vikor, promethee, electre = st.columns(5)
@@ -124,10 +125,16 @@ if choice == 'Main_page':
 
     if method is not None:
         st.write("Calculation has been completed, output illustrate as below. \n Click Download if need raw output: " )
-        result = callbacks(edited_df, normalize_method)
-        st.write(result)
-
+        ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP = callbacks(edited_df, normalize_method)
+        st.write(NUM_ALTS)
+        st.write(ATBS)
+        st.write(ALTS)
+        st.write(NUM_ATBS)
+        st.write(WEIGHTS)
+        st.write(ATB_PROP)
+        st.write(edited_df.to_numpy())
 #     @st.cache_data
+
 #     def convert_df(df):
 #         return df.to_csv().encode('utf-8')
 

@@ -123,6 +123,7 @@ def normV1(df,exclude_row=None):
     ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP= _GetData(df)
     
     mat = target_data.to_numpy()
+
     #Normalization SquareRootmethod
     new_mat=copy.deepcopy(mat)
     new_mat2=copy.deepcopy(mat)
@@ -221,7 +222,7 @@ def distance(mat,PIS,NIS,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP):
     return PDist, NDist, PRatio, NRatio
 
 def plot_graph(raw_df,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP):
-    mat = raw_df[:-2,:].to_numpy()
+    mat = raw_df.iloc[:-2,:].to_numpy()
     color=['r','g','b','c','m','y','k']
     ax=plt.gca()
     ax.set_title("Alternative Scores")
@@ -236,33 +237,33 @@ def plot_graph(raw_df,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP):
 
 def TOPSIS_run(raw_df,normalize_method):
     ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP= _GetData(raw_df)
-    # Call to calculate normalize:
-    norm_df_w_weight,norm_df_wo_weight = normalize_wo_w_weight(raw_df,normalize_method)
-    # Next step:
-    PIS,NIS=findPNIS(norm_df_w_weight,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP)
-    PDist, NDist, PRatio, NRatio=distance(norm_df_w_weight,PIS,NIS,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP)
-    val=max(PRatio)
-    ind=PRatio.index(val)
+    # # Call to calculate normalize:
+    # norm_df_w_weight,norm_df_wo_weight = normalize_wo_w_weight(raw_df,normalize_method)
+    # # Next step:
+    # PIS,NIS=findPNIS(norm_df_w_weight,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP)
+    # PDist, NDist, PRatio, NRatio=distance(norm_df_w_weight,PIS,NIS,ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP)
+    # val=max(PRatio)
+    # ind=PRatio.index(val)
 
-    #Output txt:
-    _txtResults = ""
-    _txtResults+="TOPSIC Method Report \n"
-    _txtResults+="Alternative list \n"+str(ALTS) + "\n"
-    _txtResults+="Attribute list \n" + str(ATBS) + "\n"
-    _txtResults+="Attribute prop \n" +str(ATB_PROP) + "\n"
-    _txtResults+="Weight list \n" + str(WEIGHTS) + "\n"
-    _txtResults= _txtResults+"The normalized matrix w/o weights: \n" + str(norm_df_wo_weight) + "\n"
-    _txtResults= _txtResults+"The normalized matrix with weights: \n" + str(norm_df_w_weight) + "\n"
-    _txtResults= _txtResults+"PIS: \n" + str(PIS) + "\n"
-    _txtResults= _txtResults+"NIS: \n" + str(NIS) + "\n"
-    _txtResults= _txtResults+"PDist: \n" + str(PDist) + "\n"
-    _txtResults= _txtResults+"NDist: \n" + str(NDist) + "\n"
-    _txtResults= _txtResults+"C+ Similarity: \n" + str(PRatio) + "\n"
-    _txtResults= _txtResults+"C- Similarity: \n" + str(NRatio) + "\n"
-    _txtResults= _txtResults+"Best alternative: \n" + ALTS[ind] + "\n"
+    # #Output txt:
+    # _txtResults = ""
+    # _txtResults+="TOPSIC Method Report \n"
+    # _txtResults+="Alternative list \n"+str(ALTS) + "\n"
+    # _txtResults+="Attribute list \n" + str(ATBS) + "\n"
+    # _txtResults+="Attribute prop \n" +str(ATB_PROP) + "\n"
+    # _txtResults+="Weight list \n" + str(WEIGHTS) + "\n"
+    # _txtResults= _txtResults+"The normalized matrix w/o weights: \n" + str(norm_df_wo_weight) + "\n"
+    # _txtResults= _txtResults+"The normalized matrix with weights: \n" + str(norm_df_w_weight) + "\n"
+    # _txtResults= _txtResults+"PIS: \n" + str(PIS) + "\n"
+    # _txtResults= _txtResults+"NIS: \n" + str(NIS) + "\n"
+    # _txtResults= _txtResults+"PDist: \n" + str(PDist) + "\n"
+    # _txtResults= _txtResults+"NDist: \n" + str(NDist) + "\n"
+    # _txtResults= _txtResults+"C+ Similarity: \n" + str(PRatio) + "\n"
+    # _txtResults= _txtResults+"C- Similarity: \n" + str(NRatio) + "\n"
+    # _txtResults= _txtResults+"Best alternative: \n" + ALTS[ind] + "\n"
     
     
     
-    return _txtResults
+    return ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP
 
 

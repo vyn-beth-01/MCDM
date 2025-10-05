@@ -120,12 +120,7 @@ def normV1(df,exclude_row=None):
     else:
         target_data = df.iloc[:-exclude_row,:]
     # Get attribute:
-    ALTS = target_data.index()[:-2] #list of alternatives
-    NUM_ALTS=len(ALTS)
-    ATBS=target_data.columns() #list of attributes
-    NUM_ATBS=len(ATBS)
-    ATB_PROP = target_data.loc["Prop"].values().tolist() #list of prop
-    WEIGHTS=[float(i) for i in target_data.loc['Weights'].values().tolist()]
+    ALTS, NUM_ALTS, ATBS, NUM_ATBS,WEIGHTS,ATB_PROP= _GetData(df)
     
     mat = target_data.to_numpy()
     """Normalization SquareRootmethod"""
